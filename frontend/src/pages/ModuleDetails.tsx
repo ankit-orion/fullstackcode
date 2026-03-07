@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { useParams, Link } from "react-router-dom";
 import {
   ChevronDown,
@@ -11,22 +11,70 @@ import styles from "./ModuleDetails.module.css";
 
 import { CURRICULUM_DATA } from "../data/curriculum";
 
+/* ----------------------------- Types ----------------------------- */
+
+type ArticleSection = {
+  heading: string;
+  paragraphs?: string[];
+  code?: string;
+};
+
+type Article = {
+  htmlContent?: string;
+  lead?: string;
+  sections?: ArticleSection[];
+};
+
+type Practice = {
+  title: string;
+  desc: string;
+  link: string;
+};
+
+type Topic = {
+  id: string;
+  title: string;
+  type: "article" | "practice";
+  readingTime?: string;
+  article?: Article;
+  practice?: Practice;
+};
+
+type Section = {
+  id: string;
+  title: string;
+  topics: Topic[];
+};
+
+type Module = {
+  title: string;
+  sections: Section[];
+};
+
+/* -------------------------- Component ---------------------------- */
+
 export function ModuleDetails() {
   const { moduleId } = useParams();
-  const [activeTopicId, setActiveTopicId] = useState("t1");
+
+  const [activeTopicId, setActiveTopicId] = useState<string>("t1");
+
   const [expandedSections, setExpandedSections] = useState<
     Record<string, boolean>
   >({ s1: true, s2: true });
+
   const [completedTopics, setCompletedTopics] = useState<Set<string>>(
-    new Set(["t1"]),
+    new Set(["t1"])
   );
 
-  const data: any =
-    (CURRICULUM_DATA as any)[moduleId as keyof typeof CURRICULUM_DATA] ||
-    CURRICULUM_DATA.html;
+  const curriculum = CURRICULUM_DATA as Record<string, Module>;
+
+  const data: Module = curriculum[moduleId as string] || curriculum.html;
 
   const toggleSection = (sectionId: string) => {
-    setExpandedSections((prev) => ({ ...prev, [sectionId]: !prev[sectionId] }));
+    setExpandedSections((prev) => ({
+      ...prev,
+      [sectionId]: !prev[sectionId],
+    }));
   };
 
   const markComplete = () => {
@@ -38,16 +86,19 @@ export function ModuleDetails() {
   };
 
   const { activeTopic, totalTopicsCount } = useMemo(() => {
-    let active = null;
+    let active: Topic | null = null;
     let count = 0;
+
     for (const section of data.sections) {
       for (const topic of section.topics) {
         count++;
+
         if (topic.id === activeTopicId) {
           active = topic;
         }
       }
     }
+
     return { activeTopic: active, totalTopicsCount: count };
   }, [activeTopicId, data]);
 
@@ -56,20 +107,24 @@ export function ModuleDetails() {
 
   return (
     <div className={styles.layout}>
-      {/* Sidebar Navigation */}
+      {/* Sidebar */}
+
       <aside className={styles.sidebar}>
         <div className={styles.sidebarHeader}>
           <Link to="/modules" className={styles.backLink}>
             &larr; Back to Modules
           </Link>
+
           <h2>{data.title}</h2>
+
           <div className={styles.progress}>
             <div className={styles.progressBar}>
               <div
                 className={styles.progressFill}
                 style={{ width: `${progressPercent}%` }}
-              ></div>
+              />
             </div>
+
             <span>
               {completedTopics.size}/{totalTopicsCount} Completed
             </span>
@@ -77,7 +132,7 @@ export function ModuleDetails() {
         </div>
 
         <div className={styles.curriculumList}>
-          {data.sections.map((section) => (
+          {data.sections.map((section: Section) => (
             <div key={section.id} className={styles.section}>
               <button
                 className={styles.sectionHeader}
@@ -89,18 +144,22 @@ export function ModuleDetails() {
                   ) : (
                     <ChevronRight size={18} />
                   )}
+
                   <span>{section.title}</span>
                 </div>
               </button>
 
               {expandedSections[section.id] && (
                 <div className={styles.topicList}>
-                  {section.topics.map((topic) => {
+                  {section.topics.map((topic: Topic) => {
                     const isCompleted = completedTopics.has(topic.id);
+
                     return (
                       <button
                         key={topic.id}
-                        className={`${styles.topicItem} ${activeTopicId === topic.id ? styles.active : ""}`}
+                        className={`${styles.topicItem} ${
+                          activeTopicId === topic.id ? styles.active : ""
+                        }`}
                         onClick={() => setActiveTopicId(topic.id)}
                       >
                         <span className={styles.topicIcon}>
@@ -115,7 +174,10 @@ export function ModuleDetails() {
                             <PlayCircle size={16} />
                           )}
                         </span>
-                        <span className={styles.topicName}>{topic.title}</span>
+
+                        <span className={styles.topicName}>
+                          {topic.title}
+                        </span>
                       </button>
                     );
                   })}
@@ -126,7 +188,8 @@ export function ModuleDetails() {
         </div>
       </aside>
 
-      {/* Main Content Area */}
+      {/* Main Content */}
+
       <main className={styles.contentArea}>
         {activeTopic ? (
           <article className={styles.article}>
@@ -134,6 +197,7 @@ export function ModuleDetails() {
               <span className={styles.readingTime}>
                 {activeTopic.readingTime}
               </span>
+
               <h1>{activeTopic.title}</h1>
             </div>
 
@@ -152,27 +216,31 @@ export function ModuleDetails() {
                       <p
                         className={styles.lead}
                         dangerouslySetInnerHTML={{
-                          __html: activeTopic.article.lead,
+                          __html: activeTopic.article.lead || "",
                         }}
-                      ></p>
+                      />
 
                       {activeTopic.article.sections?.map(
-                        (sec: any, idx: number) => (
+                        (sec: ArticleSection, idx: number) => (
                           <div key={idx}>
                             <h2>{sec.heading}</h2>
-                            {sec.paragraphs?.map((p: string, pIdx: number) => (
-                              <p
-                                key={pIdx}
-                                dangerouslySetInnerHTML={{ __html: p }}
-                              ></p>
-                            ))}
+
+                            {sec.paragraphs?.map(
+                              (p: string, pIdx: number) => (
+                                <p
+                                  key={pIdx}
+                                  dangerouslySetInnerHTML={{ __html: p }}
+                                />
+                              )
+                            )}
+
                             {sec.code && (
                               <pre>
                                 <code>{sec.code}</code>
                               </pre>
                             )}
                           </div>
-                        ),
+                        )
                       )}
                     </>
                   )}
@@ -183,11 +251,13 @@ export function ModuleDetails() {
                 <div className={styles.practiceInline}>
                   <div className={styles.practiceHeader}>
                     <Code2 size={24} className={styles.practiceIcon} />
+
                     <div>
                       <h3>{activeTopic.practice.title}</h3>
                       <p>{activeTopic.practice.desc}</p>
                     </div>
                   </div>
+
                   <Link
                     to={activeTopic.practice.link}
                     className={styles.practiceButton}
@@ -217,7 +287,12 @@ export function ModuleDetails() {
             </div>
           </article>
         ) : (
-          <div style={{ marginTop: "2rem", color: "var(--text-secondary)" }}>
+          <div
+            style={{
+              marginTop: "2rem",
+              color: "var(--text-secondary)",
+            }}
+          >
             Select a topic from the sidebar to start learning.
           </div>
         )}

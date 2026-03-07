@@ -1,4 +1,3 @@
-import React from "react";
 import { Link, NavLink } from "react-router-dom";
 import { Moon, Sun, Layers, BookOpen, Code2 } from "lucide-react";
 import { useTheme } from "../../context/ThemeContext";
