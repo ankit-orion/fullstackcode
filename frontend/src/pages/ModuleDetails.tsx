@@ -143,11 +143,22 @@ export function ModuleDetails() {
   };
 
   const markComplete = () => {
+    // 1. Mark current as complete
     setCompletedTopics((prev) => {
       const next = new Set(prev);
       next.add(activeTopicId);
       return next;
     });
+
+    // 2. Navigate to next topic if it exists
+    const currentIndex = allTopics.findIndex(t => t.id === activeTopicId);
+    if (currentIndex !== -1 && currentIndex < allTopics.length - 1) {
+      const nextTopic = allTopics[currentIndex + 1];
+      setActiveTopicId(nextTopic.id);
+      
+      // Scroll to top when moving to next article
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
   if (loading) {
@@ -293,10 +304,9 @@ export function ModuleDetails() {
                 <button
                   className={styles.markComplete}
                   onClick={markComplete}
-                  disabled={completedTopics.has(activeTopic.id)}
                 >
-                  {completedTopics.has(activeTopic.id)
-                    ? "Completed"
+                  {allTopics.findIndex(t => t.id === activeTopic.id) === allTopics.length - 1
+                    ? (completedTopics.has(activeTopic.id) ? "Module Finished ✓" : "Finish Module ✓")
                     : "Next Section →"}
                 </button>
               </div>
