@@ -41,7 +41,7 @@ async function apiFetch<T>(path: string): Promise<T> {
 export const api = {
   /** Fetch all modules (lightweight, with topic count) */
   getModules(): Promise<ModuleListItem[]> {
-    return apiFetch<ModuleListItem[]>('/modules');
+    return apiFetch<ModuleListItem[]>('/api/modules');
   },
 
   /**
@@ -49,6 +49,6 @@ export const api = {
    * Accepts either a UUID or an order number (1, 2, 3, ...).
    */
   getModule(moduleId: string | number): Promise<ModuleDetail> {
-    return apiFetch<ModuleDetail>(`/modules/${moduleId}`);
+    return apiFetch<ModuleDetail>(`/api/modules/${moduleId}`);
   },
 };
