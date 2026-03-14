@@ -30,7 +30,8 @@ export interface ModuleDetail {
 // ─── Fetchers ─────────────────────────────────────────────────────────────────
 
 async function apiFetch<T>(path: string): Promise<T> {
-  const res = await fetch(`${BASE_URL}${path}`);
+  const url = `${BASE_URL.replace(/\/$/, '')}${path}`;
+  const res = await fetch(url);
   if (!res.ok) {
     throw new Error(`API error ${res.status}: ${res.statusText}`);
   }
