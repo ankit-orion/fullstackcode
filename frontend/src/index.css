@@ -1,49 +1,53 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@700&display=swap");
 
 :root {
   --bg-primary: #ffffff;
-  --bg-secondary: #f8fafc;
-  --bg-tertiary: #f1f5f9;
-  --text-primary: #0f172a;
-  --text-secondary: #475569;
-  --text-tertiary: #94a3b8;
-  --border-color: #e2e8f0;
-  --border-hover: #cbd5e1;
-  --accent-color: #ef4444; /* LeetCode-like red/orange */
-  --accent-hover: #dc2626;
+  --bg-secondary: #fcfcfc;
+  --bg-tertiary: #f5f5f5;
+  --text-primary: #000000;
+  --text-secondary: #555555;
+  --text-tertiary: #888888;
+  --border-color: rgba(0, 0, 0, 0.06);
+  --border-hover: rgba(0, 0, 0, 0.12);
+  --accent-color: #000000;
+  --accent-hover: #333333;
   --success-color: #10b981;
   --success-bg: #d1fae5;
   --danger-color: #ef4444;
   --danger-bg: #fee2e2;
   --warning-color: #f59e0b;
   --warning-bg: #fef3c7;
-  --btn-primary-bg: #0f172a;
+  --btn-primary-bg: #000000;
   --btn-primary-text: #ffffff;
-  --btn-primary-hover: #334155;
-  --ring-color: rgba(239, 68, 68, 0.4);
+  --btn-primary-hover: #333333;
+  --ring-color: rgba(0, 0, 0, 0.1);
+  --card-bg: #fff;
+  --nav-bg: rgba(255, 255, 255, 0.8);
 }
 
 [data-theme="dark"] {
-  --bg-primary: #1a1a1a;
-  --bg-secondary: #242424;
-  --bg-tertiary: #2e2e2e;
-  --text-primary: #f8fafc;
-  --text-secondary: #cbd5e1;
-  --text-tertiary: #64748b;
-  --border-color: #333333;
-  --border-hover: #444444;
-  --accent-color: #fca5a5;
-  --accent-hover: #f87171;
+  --bg-primary: #000000;
+  --bg-secondary: #0a0a0a;
+  --bg-tertiary: #111111;
+  --text-primary: #ffffff;
+  --text-secondary: #a1a1a1;
+  --text-tertiary: #666666;
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-hover: rgba(255, 255, 255, 0.15);
+  --accent-color: #ffffff;
+  --accent-hover: #e5e5e5;
   --success-color: #10b981;
-  --success-bg: rgba(16, 185, 129, 0.15);
+  --success-bg: rgba(16, 185, 129, 0.1);
   --danger-color: #ef4444;
-  --danger-bg: rgba(239, 68, 68, 0.15);
+  --danger-bg: rgba(239, 68, 68, 0.1);
   --warning-color: #fbbf24;
-  --warning-bg: rgba(245, 158, 11, 0.15);
-  --btn-primary-bg: #f8fafc;
-  --btn-primary-text: #0f172a;
-  --btn-primary-hover: #e2e8f0;
-  --ring-color: rgba(252, 165, 165, 0.4);
+  --warning-bg: rgba(245, 158, 11, 0.1);
+  --btn-primary-bg: #ffffff;
+  --btn-primary-text: #000000;
+  --btn-primary-hover: #e5e5e5;
+  --ring-color: rgba(255, 255, 255, 0.2);
+  --card-bg: rgba(255, 255, 255, 0.02);
+  --nav-bg: rgba(0, 0, 0, 0.8);
 }
 
 * {

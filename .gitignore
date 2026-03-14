@@ -1,0 +1,20 @@
+# General
+node_modules/
+.DS_Store
+.vscode/
+.idea/
+
+# Environment files
+.env
+.env.*
+
+# Logs
+*.log
+
+# Build outputs
+/frontend/dist
+/backend/dist
+
+# Project specific
+parsed_premium_data.json
+premium_articles.md

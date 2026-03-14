@@ -5,9 +5,9 @@ export function Home() {
   return (
     <div className={styles.container}>
       <header className={styles.header}>
-        <h1>Full-Stack Challenges</h1>
+        <h1>Architectural Problems</h1>
         <p>
-          Practice building modern web applications with real-world scenarios.
+          Master the stack by solving real-world engineering challenges at scale.
         </p>
       </header>
 
