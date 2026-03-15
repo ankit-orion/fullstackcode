@@ -1,6 +1,9 @@
 .footer {
-  background-color: var(--bg-primary);
-  border-top: 1px solid var(--border-color);
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
   padding: 3rem 1.5rem;
   margin-top: auto;
   position: relative;

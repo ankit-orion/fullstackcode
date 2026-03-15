@@ -23,6 +23,14 @@
   --ring-color: rgba(0, 0, 0, 0.1);
   --card-bg: #fff;
   --nav-bg: rgba(255, 255, 255, 0.8);
+
+  /* Glassmorphism tokens – light mode */
+  --glass-bg: rgba(0, 0, 0, 0.04);
+  --glass-bg-hover: rgba(0, 0, 0, 0.08);
+  --glass-border: rgba(0, 0, 0, 0.08);
+  --glass-highlight: rgba(255, 255, 255, 0.7);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  --glass-shadow-elevated: 0 8px 32px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.6);
 }
 
 [data-theme="dark"] {
@@ -48,6 +56,14 @@
   --ring-color: rgba(255, 255, 255, 0.2);
   --card-bg: rgba(255, 255, 255, 0.02);
   --nav-bg: rgba(0, 0, 0, 0.8);
+
+  /* Glassmorphism tokens – dark mode */
+  --glass-bg: rgba(255, 255, 255, 0.06);
+  --glass-bg-hover: rgba(255, 255, 255, 0.10);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-highlight: rgba(255, 255, 255, 0.15);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  --glass-shadow-elevated: 0 8px 32px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.10);
 }
 
 * {
