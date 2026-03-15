@@ -8,7 +8,8 @@ import {
   Loader2,
   AlertCircle,
   ArrowLeft,
-  List
+  List,
+  Lock
 } from "lucide-react";
 import { marked } from "marked";
 import { motion, AnimatePresence } from "framer-motion";
@@ -94,6 +95,7 @@ export function ModuleDetails() {
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({ s1: true });
   const [completedTopics, setCompletedTopics] = useState<Set<string>>(new Set());
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [jumpWarningId, setJumpWarningId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!moduleId) return;
@@ -161,7 +163,23 @@ export function ModuleDetails() {
       
       // Scroll to top when moving to next article
       window.scrollTo({ top: 0, behavior: 'smooth' });
+      setJumpWarningId(null);
     }
+  };
+
+  const handleTopicClick = (topicId: string) => {
+    const topicIndex = allTopics.findIndex(t => t.id === topicId);
+    const isLocked = topicIndex > 0 && !completedTopics.has(allTopics[topicIndex - 1].id);
+    const isCompleted = completedTopics.has(topicId);
+
+    if (isLocked && !isCompleted) {
+      setJumpWarningId(topicId);
+      setActiveTopicId(topicId);
+    } else {
+      setJumpWarningId(null);
+      setActiveTopicId(topicId);
+    }
+    setIsSidebarOpen(false);
   };
 
   if (loading) {
@@ -236,22 +254,24 @@ export function ModuleDetails() {
 
               {expandedSections[section.id] && (
                 <div className={styles.topicList}>
-                  {section.topics.map((topic) => {
+                  {section.topics.map((topic, index) => {
                     const isCompleted = completedTopics.has(topic.id);
+                    const isLocked = index > 0 && !completedTopics.has(section.topics[index - 1].id);
+                    const isActive = activeTopicId === topic.id;
+
                     return (
                       <button
                         key={topic.id}
                         className={`${styles.topicItem} ${
-                          activeTopicId === topic.id ? styles.active : ""
-                        }`}
-                        onClick={() => {
-                          setActiveTopicId(topic.id);
-                          setIsSidebarOpen(false);
-                        }}
+                          isActive ? styles.active : ""
+                        } ${isLocked && !isCompleted ? styles.locked : ""}`}
+                        onClick={() => handleTopicClick(topic.id)}
                       >
                         <span className={styles.topicIcon}>
                           {isCompleted ? (
                             <CheckCircle2 size={16} className={styles.completed} />
+                          ) : isLocked ? (
+                            <Lock size={16} className={styles.lockIcon} />
                           ) : (
                             <PlayCircle size={16} />
                           )}
@@ -282,7 +302,52 @@ export function ModuleDetails() {
 
       <main className={styles.contentArea}>
         <AnimatePresence mode="wait">
-          {activeTopic ? (
+          {jumpWarningId && activeTopic ? (
+            <motion.div
+              key="jump-warning"
+              className={styles.jumpWarning}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              variants={contentVariants}
+            >
+              <div className={styles.skeletonContainer}>
+                <div className={styles.skeletonHeader} />
+                <div className={styles.skeletonLine} style={{ width: "80%" }} />
+                <div className={styles.skeletonLine} style={{ width: "90%" }} />
+                <div className={styles.skeletonLine} style={{ width: "70%" }} />
+              </div>
+
+              <div className={styles.warningCard}>
+                <Lock size={48} className={styles.warningIcon} />
+                <h2>Article Locked</h2>
+                <p>
+                  You still have not completed the previous articles. 
+                  Are you sure you want to jump ahead and skip the prerequisite content?
+                </p>
+                <div className={styles.warningActions}>
+                  <button 
+                    className={styles.proceedBtn}
+                    onClick={() => setJumpWarningId(null)}
+                  >
+                    Yes, go ahead
+                  </button>
+                  <button 
+                    className={styles.goBackBtn}
+                    onClick={() => {
+                      const firstIncomplete = allTopics.find(t => !completedTopics.has(t.id));
+                      if (firstIncomplete) {
+                        setActiveTopicId(firstIncomplete.id);
+                        setJumpWarningId(null);
+                      }
+                    }}
+                  >
+                    Complete previous articles
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          ) : activeTopic ? (
             <motion.article 
               key={activeTopic.id}
               className={styles.article}
