@@ -72,7 +72,8 @@ function toSections(topics: TopicDetail[]): SectionUI[] {
     id: "s1",
     title: "Curriculum Topics",
     topics: topics.map((t) => ({
-      id: t.id,
+      // Use t.id (slug) if available, fallback to stringified order
+      id: t.id || t.order.toString(),
       title: t.title,
       type: "reading" as const,
       readingTime: readingTime(t.content),
@@ -107,7 +108,9 @@ export function ModuleDetails() {
       .then((data) => {
         setModuleData(data);
         if (data.topics.length > 0) {
-          setActiveTopicId(data.topics[0].id);
+          // Initialize with first topic ID (slug or order)
+          const firstTopic = data.topics[0];
+          setActiveTopicId(firstTopic.id || firstTopic.order.toString());
         }
         setLoading(false);
       })
