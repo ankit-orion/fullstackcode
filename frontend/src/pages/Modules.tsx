@@ -143,7 +143,7 @@ export function Modules() {
             return (
               <motion.div key={module.id} variants={fadeUpVariant}>
                 <Link
-                  to={`/modules/${module.order}`}
+                  to={`/modules/${module.id}`}
                   className={styles.card}
                 >
                   <div className={styles.cardGlow}></div>
